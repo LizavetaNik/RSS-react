@@ -1,0 +1,13 @@
+.wrapper {
+    border: 3px solid rgb(10, 10, 131);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wrapper:hover {
+    background-color: lightblue;
+}
+
+.img_item {
+    width: 70px;
+}

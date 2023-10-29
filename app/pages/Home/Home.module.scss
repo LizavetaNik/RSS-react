@@ -1,0 +1,15 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wrapper_result {
+  max-width: 1440px;
+}
+
+.button_red {
+  background-color: red;
+}
