@@ -4,12 +4,14 @@ import PageNotFound from '../../pages/PageNotFound/PageNotFound';
 import { PublicRoute } from '../../routes/PublicRoute';
 
 function App() {
-return (
+  return (
     <Routes>
-        <Route path="/" element={<PublicRoute />}>
-          <Route index path="" element={<Home />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Route>
+      <Route path="/" element={<PublicRoute />}>
+        <Route index path="/" element={<Home />} />
+        <Route path="home/" element={<Home />} />
+        <Route path="page/:pageNumber" element={<Home />} />
+        <Route path="*" element={<PageNotFound />} />
+      </Route>
     </Routes>
   );
 }

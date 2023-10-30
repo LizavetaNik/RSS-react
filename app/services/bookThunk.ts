@@ -1,9 +1,8 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-export const fetchBooks = async (name: string) => {
+export const fetchBooks = async (name: string, pageNumber: number) => {
     
     try {
-      const pageNumber = 1;
       const queryParams = [];
       if (name) {
         queryParams.push(`name=${name}`);
