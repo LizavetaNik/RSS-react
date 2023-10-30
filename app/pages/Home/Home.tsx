@@ -2,6 +2,7 @@ import { Component } from 'react';
 import styles from './Home.module.scss';
 import Result from '../../components/Result/Result';
 import Search from '../../components/Search/Search';
+import ErrorBoundary from '../../components/Error/ErrorBoundary';
 
 interface HomeState {
   searchInput: string;
@@ -23,32 +24,16 @@ class Home extends Component<{}, HomeState> {
   };
 
   handleError = () => {
-    try {
-      throw new Error('Caught an error');
-    } catch (error) {
-      console.log("Caught an error");
-      this.setState({ error: error as Error });
-    } 
+    this.setState({ error: Error("Error boundary") });
+    ErrorBoundary.getDerivedStateFromError( Error("Error boundary") );
   };
-
-  removeError = () => {
-    this.setState({ error: null });
-  }
 
   render() {
     if (this.state.error) {
-      
-      return (
-        <>
-        <h1>Caught an error</h1>
-        <button className={styles.button_red} type="button" onClick={this.removeError}>
-          Remove error
-        </button>
-        </>
-      )
+      throw new Error('ErrorBoundary worked!');
     }
     return (
-     <>
+     <ErrorBoundary >
         <button className={styles.button_red} type="button" onClick={this.handleError}>
           Emit error
         </button>
@@ -59,7 +44,7 @@ class Home extends Component<{}, HomeState> {
             <Result searchInput={this.state.searchInput} />
           </div>
         </div>
-      </>
+      </ErrorBoundary>
     );
   }
 }
