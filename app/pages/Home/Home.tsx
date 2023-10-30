@@ -9,8 +9,10 @@ interface HomeState {
   error: Error | null;
 }
 
-class Home extends Component<{}, HomeState> {
-  constructor(props: {}) {
+interface HomeProps {}
+
+class Home extends Component<HomeProps, HomeState> {
+  constructor(props: HomeProps) {
     super(props);
     this.state = {
       searchInput: '',
@@ -19,13 +21,13 @@ class Home extends Component<{}, HomeState> {
     this.handleError = this.handleError.bind(this);
   }
 
- handleSearchSubmit = (inputValue: string) => {
+  handleSearchSubmit = (inputValue: string) => {
     this.setState({ searchInput: inputValue });
   };
 
-  handleError = () => {
-    this.setState({ error: Error("Error boundary") });
-    ErrorBoundary.getDerivedStateFromError( Error("Error boundary") );
+  handleError: () => void = () => {
+    this.setState({ error: new Error("Error boundary") });
+    ErrorBoundary.getDerivedStateFromError(new Error("Error boundary"));
   };
 
   render() {
@@ -33,11 +35,11 @@ class Home extends Component<{}, HomeState> {
       throw new Error('ErrorBoundary worked!');
     }
     return (
-     <ErrorBoundary >
+      <ErrorBoundary>
         <button className={styles.button_red} type="button" onClick={this.handleError}>
           Emit error
         </button>
-       
+
         <div className={styles.wrapper}>
           <div className={styles.wrapper_result}>
             <Search onSearchSubmit={this.handleSearchSubmit} />
