@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchBooks } from '../../services/bookThunk';
 import styles from './Result.module.scss';
 import Book from './Book/Book';
@@ -8,54 +8,40 @@ interface ResultProps {
     searchInput: string;
 }
 
-interface ResultState {
-    booksArr: BookItem[];
-}
+const Result = ({ searchInput }: ResultProps) => {
+  const [booksArr, setBooksArr] = useState<BookItem[]>([]);
 
-class Result extends Component<ResultProps, ResultState> {
-  constructor(props: ResultProps) {
-    super(props);
-    this.state = {
-      booksArr: [],
+  const fetchData = async () => {
+      try {
+        const action = await fetchBooks(searchInput);
+        if (action) {
+          const booksData = action.results;
+          setBooksArr(booksData);
+        }
+      } catch (err: unknown) { 
+          if (err instanceof Error) {
+             console.log(err);
+          }
+        }
     };
-  }
 
-  async fetchData() {
-    try {
-      const action = await fetchBooks(this.props.searchInput);
-      if (action) {
-        const booksData = action.results;
-        this.setState({ booksArr: booksData });
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+    useEffect(() => {
+      fetchData();
+    }, [searchInput]);
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  componentDidUpdate(prevProps: ResultProps) {
-    if (this.props.searchInput !== prevProps.searchInput) {
-      this.fetchData();
-    }
-    if (this.props.searchInput === '') {
-        this.fetchData();
-    }
-  }
-
-  render() {
     return (
       <>
         <div className={styles.wrapper}>
-          {this.state.booksArr.map((book: BookItem) => (
-            <Book key={book.id} name={book.name} image={book.image} />
+          {booksArr.map((book: BookItem) => (
+            <Book
+              key={book.id}
+              name={book.name} 
+              image={book.image}
+            />
           ))}
         </div>
       </>
     );
-  }
 }
 
 export default Result;

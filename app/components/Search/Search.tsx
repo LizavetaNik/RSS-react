@@ -1,54 +1,47 @@
-import { Component } from 'react';
+import { FC, useState, useEffect } from 'react';
 import styles from './Search.module.scss';
 
 interface SearchProps {
     onSearchSubmit: (inputValue: string) => void;
 }
 
-class Search extends Component<SearchProps, { inputValue: string }> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = {
-      inputValue: '',
-    };
-  }
+const Search: FC<SearchProps> = ({ onSearchSubmit }) => {
+  const [inputValue, setInputValue] = useState("");
 
-  handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: e.target.value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
-  handleSubmit = () => {
-    localStorage.setItem('searchQuery', this.state.inputValue);
-    this.props.onSearchSubmit(this.state.inputValue);
+  const handleSubmit = () => {
+    localStorage.setItem('searchQuery', inputValue);
+    onSearchSubmit(inputValue);
   };
 
-  componentDidMount() {
+  useEffect( () => {
     const savedSearchQuery = localStorage.getItem('searchQuery');
     if (savedSearchQuery) {
-      this.setState({ inputValue: savedSearchQuery });
-      this.props.onSearchSubmit(savedSearchQuery);
+      setInputValue(savedSearchQuery);
+      onSearchSubmit(savedSearchQuery);
     }
-  }
+  }, [onSearchSubmit]);
 
-  render() {
-    return (
-      <>
+  return (
+    <>
         <div className={styles.wrapper}>
           <form>
             <input
               type="text"
               placeholder="Enter text"
-              value={this.state.inputValue}
-              onChange={this.handleInputChange}
+              value={inputValue}
+              onChange={handleInputChange}
             />
-            <button type="button" onClick={this.handleSubmit}>
+            <button type="button" onClick={handleSubmit}>
               Search
             </button>  
           </form>
         </div>
-      </>
-    );
-  }
+    </>
+  );
 }
 
 export default Search;

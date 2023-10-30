@@ -1,52 +1,39 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import styles from './Home.module.scss';
 import Result from '../../components/Result/Result';
 import Search from '../../components/Search/Search';
 import ErrorBoundary from '../../components/Error/ErrorBoundary';
 
-interface HomeState {
-  searchInput: string;
-  error: Error | null;
-}
+function Home() {
+  const [searchInput, setSearchInput] = useState('');
+  const [error, setError] = useState<Error | null>(null);
 
-class Home extends Component<{}, HomeState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      searchInput: '',
-      error: null,
-    };
-    this.handleError = this.handleError.bind(this);
+  const handleSearchSubmit = (inputValue: string) => {
+    setSearchInput(inputValue);
+  };
+
+  const handleError = () => {
+    setError( Error("Error boundary") );
+  };
+
+  if (error) {
+    throw new Error('ErrorBoundary worked!');
   }
 
- handleSearchSubmit = (inputValue: string) => {
-    this.setState({ searchInput: inputValue });
-  };
+  return (
+    <ErrorBoundary>
+      <button className={styles.button_red} type="button" onClick={handleError}>
+        Emit error
+      </button>
 
-  handleError = () => {
-    this.setState({ error: Error("Error boundary") });
-    ErrorBoundary.getDerivedStateFromError( Error("Error boundary") );
-  };
-
-  render() {
-    if (this.state.error) {
-      throw new Error('ErrorBoundary worked!');
-    }
-    return (
-     <ErrorBoundary >
-        <button className={styles.button_red} type="button" onClick={this.handleError}>
-          Emit error
-        </button>
-       
-        <div className={styles.wrapper}>
-          <div className={styles.wrapper_result}>
-            <Search onSearchSubmit={this.handleSearchSubmit} />
-            <Result searchInput={this.state.searchInput} />
-          </div>
+      <div className={styles.wrapper}>
+        <div className={styles.wrapper_result}>
+          <Search onSearchSubmit={handleSearchSubmit} />
+          <Result searchInput={searchInput} />
         </div>
-      </ErrorBoundary>
-    );
-  }
+      </div>
+    </ErrorBoundary>
+  );
 }
 
 export default Home;
