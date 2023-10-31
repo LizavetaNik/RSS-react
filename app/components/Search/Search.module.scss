@@ -1,0 +1,17 @@
+.wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0;
+}
+  
+button {
+    background-color: rgb(10, 10, 131);
+    border: none;
+    color: beige;
+    margin-left: 5px;
+    cursor: pointer;
+    width: 100px;
+    height: 32px;
+}
