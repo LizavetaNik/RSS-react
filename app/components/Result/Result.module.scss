@@ -1,8 +1,7 @@
 .pagination {
     display: flex;
     justify-content: center;
-    align-self: center;
-    margin-bottom: 10px;
+    align-self: baseline;
 }
 
 .numberPage {
@@ -29,6 +28,10 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between; 
+}
+
+.totalBlock {
+    margin: 0 10px;
 }
   
 .rightPanel {

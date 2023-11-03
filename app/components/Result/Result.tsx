@@ -3,7 +3,7 @@ import { fetchBooks } from '../../services/bookThunk';
 import styles from './Result.module.scss';
 import Book from './Book/Book';
 import { BookItem } from '../../data/users.data';
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import BookDetails from './BookDetails/BookDetails';
 import { ClipLoader } from 'react-spinners';
 
@@ -13,13 +13,17 @@ interface ResultProps {
 
 const Result = ({ searchInput }: ResultProps) => {
   const [booksArr, setBooksArr] = useState<BookItem[]>([]);
-  const navigate = useNavigate();
   const [pageNumber, setPageNumber] = useState(1);
-  const [newQuantity, setNewQuantity] = useState('20');
+  const [newQuantity, setNewQuantity] = useState(20);
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalBooks, setTotalBooks] = useState(1);
+
+  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const bookId = searchParams.get("book");
-  const [isLoading, setIsLoading] = useState(true);
+  const quantityOptions = [5, 10, 15, 20];
 
   const fetchData = async () => {
     try {
@@ -27,6 +31,8 @@ const Result = ({ searchInput }: ResultProps) => {
       const action = await fetchBooks(searchInput, pageNumber);
       if (action) {
         const booksData = action.results;
+        setTotalPages(Number(action.info.pages));
+        setTotalBooks(Number(action.info.count));
         setBooksArr(booksData);
         setIsLoading(false);
         navigate(`/home?page=${pageNumber}`, { replace: true });
@@ -74,19 +80,26 @@ const Result = ({ searchInput }: ResultProps) => {
         </button>
         <div className={styles.quantityBooks}>
           <label>Change quantity</label>
-          <input
-            type="number"
+          <select
             id="bookQuantity"
-            placeholder="Введите количество книг"
             value={newQuantity}
-            onChange={(e) => { setPageNumber(1); setNewQuantity(e.target.value) }}
-            />
+            onChange={(e) => { setPageNumber(1); setNewQuantity( Number(e.target.value)) }}
+          >
+            {quantityOptions.map( (option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
+      </div>
+      <div className={styles.totalBlock}>
+        <p>Total elements : {totalBooks} / Total pages : {totalPages} / Search : {searchInput}</p>
       </div>
       <div className={`page-container ${bookId ? '' : 'bookDetailsNotVisible'}`}>
         <div className={styles.wrapperResult}>
           <div className={styles.wrapper}>
-            {booksArr.slice(0, Number(newQuantity)).map((book: BookItem) => (
+            {booksArr.slice(0, newQuantity).map((book: BookItem) => (
               <Book key={book.id} name={book.name} image={book.image} bookId={book.id} pageNumber={pageNumber.toString()} />
             ))}
           </div>
