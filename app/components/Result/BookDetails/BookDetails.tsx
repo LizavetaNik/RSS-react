@@ -12,7 +12,7 @@ const BookDetails: FC<BookDetailsProps> = ( { pageNumber, dataBook}) => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    navigate(`/home?page/${pageNumber}`);
+    navigate(`?page=${pageNumber}`);
   };
 
   return (

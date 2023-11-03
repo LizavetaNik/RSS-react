@@ -14,7 +14,7 @@ const Book: FC<Props> = ({ name, image, bookId, pageNumber }) => {
     const navigate = useNavigate();
 
     const handleBookClick = () => {
-      navigate(`/home/page/${pageNumber}/book/${bookId}`);
+      navigate(`?page=${pageNumber}&book=${bookId}`);
     };
     
     return (

@@ -3,7 +3,7 @@ import { fetchBooks } from '../../services/bookThunk';
 import styles from './Result.module.scss';
 import Book from './Book/Book';
 import { BookItem } from '../../data/users.data';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import BookDetails from './BookDetails/BookDetails';
 import { ClipLoader } from 'react-spinners';
 
@@ -16,7 +16,9 @@ const Result = ({ searchInput }: ResultProps) => {
   const navigate = useNavigate();
   const [pageNumber, setPageNumber] = useState(1);
   const [newQuantity, setNewQuantity] = useState('20');
-  const { bookId } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const bookId = searchParams.get("book");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
@@ -71,23 +73,14 @@ const Result = ({ searchInput }: ResultProps) => {
           Next
         </button>
         <div className={styles.quantityBooks}>
+          <label>Change quantity</label>
           <input
             type="number"
             id="bookQuantity"
             placeholder="Введите количество книг"
             value={newQuantity}
-            onChange={(e) => setNewQuantity(e.target.value)}
+            onChange={(e) => { setPageNumber(1); setNewQuantity(e.target.value) }}
             />
-            <button 
-              onClick={() => {
-                if (newQuantity !== '') {
-                  setNewQuantity(newQuantity);
-                  setPageNumber(1);
-                }
-              }}
-              >
-              Change quantity
-            </button>
         </div>
       </div>
       <div className={`page-container ${bookId ? '' : 'bookDetailsNotVisible'}`}>
