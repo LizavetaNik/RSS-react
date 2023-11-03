@@ -3,7 +3,8 @@ import { fetchBooks } from '../../services/bookThunk';
 import styles from './Result.module.scss';
 import Book from './Book/Book';
 import { BookItem } from '../../data/users.data';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import BookDetails from './BookDetails/BookDetails';
 
 interface ResultProps {
   searchInput: string;
@@ -13,11 +14,10 @@ const Result = ({ searchInput }: ResultProps) => {
   const [booksArr, setBooksArr] = useState<BookItem[]>([]);
   const navigate = useNavigate();
   const [pageNumber, setPageNumber] = useState(1);
-  const [quantityBooks, setQuantityBooks] = useState(20);
-  const [newQuantity, setNewQuantity] = useState('');
+  const [newQuantity, setNewQuantity] = useState('20');
+  const { bookId } = useParams();
 
   const fetchData = async () => {
-    console.log("Num page = " + pageNumber);
     try {
       const action = await fetchBooks(searchInput, pageNumber);
       if (action) {
@@ -35,6 +35,10 @@ const Result = ({ searchInput }: ResultProps) => {
   useEffect(() => {
     fetchData();
   }, [searchInput, pageNumber]);
+
+  const getDataBook = (id: string): BookItem | undefined => {
+    return booksArr.find((book) => Number(book.id) === Number(id));
+  };
 
   return (
     <>
@@ -67,7 +71,7 @@ const Result = ({ searchInput }: ResultProps) => {
             <button 
               onClick={() => {
                 if (newQuantity !== '') {
-                  setQuantityBooks(Number(newQuantity));
+                  setNewQuantity(newQuantity);
                   setPageNumber(1);
                 }
               }}
@@ -76,11 +80,20 @@ const Result = ({ searchInput }: ResultProps) => {
             </button>
         </div>
       </div>
-      
-      <div className={styles.wrapper}>
-        {booksArr.slice(0, quantityBooks).map((book: BookItem) => (
-          <Book key={book.id} name={book.name} image={book.image} />
-        ))}
+      <div className={`page-container ${bookId ? '' : 'bookDetailsNotVisible'}`}>
+        <div className={styles.wrapperResult}>
+          <div className={styles.wrapper}>
+            {booksArr.slice(0, Number(newQuantity)).map((book: BookItem) => (
+              <Book key={book.id} name={book.name} image={book.image} bookId={book.id} pageNumber={pageNumber.toString()} />
+            ))}
+          </div>
+          {(bookId != undefined) && (
+            <div className={`${styles.rightPanel}`}>
+              <Outlet />
+              <BookDetails pageNumber={pageNumber.toString()} dataBook={getDataBook(bookId)}/>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
