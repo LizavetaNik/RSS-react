@@ -14,6 +14,10 @@ export const fetchBooks = async (name: string, pageNumber: number) => {
           Accept: 'application/json',
         },
       });
+
+      if (response.status === 404) {
+        return "";
+      }
       
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

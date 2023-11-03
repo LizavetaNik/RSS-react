@@ -32,11 +32,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     console.error(errorInfo);
   }
 
+  handleGoBack = () => {
+    this.setState({ hasError: false });
+  };
+
   render() {
     if (this.state.hasError) {
       return (
         <div>
         <h1>Caught an error</h1>
+        <button onClick={this.handleGoBack}>Go Back</button>
         </div>
       );
     } else {

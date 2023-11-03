@@ -5,6 +5,7 @@ import Book from './Book/Book';
 import { BookItem } from '../../data/users.data';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import BookDetails from './BookDetails/BookDetails';
+import { ClipLoader } from 'react-spinners';
 
 interface ResultProps {
   searchInput: string;
@@ -16,13 +17,16 @@ const Result = ({ searchInput }: ResultProps) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [newQuantity, setNewQuantity] = useState('20');
   const { bookId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const action = await fetchBooks(searchInput, pageNumber);
       if (action) {
         const booksData = action.results;
         setBooksArr(booksData);
+        setIsLoading(false);
         navigate(`/home?page=${pageNumber}`, { replace: true });
       }
     } catch (err: unknown) {
@@ -42,6 +46,12 @@ const Result = ({ searchInput }: ResultProps) => {
 
   return (
     <>
+    {isLoading ? (
+      <div className={styles.clipLoader}>
+      <ClipLoader color="#0168ce" loading={true} size={100}/>
+    </div> 
+    ) : (
+      <>
       <div className={styles.pagination}>
         <button
           onClick={() => {
@@ -95,6 +105,8 @@ const Result = ({ searchInput }: ResultProps) => {
           )}
         </div>
       </div>
+      </>
+      )}
     </>
   );
 };
