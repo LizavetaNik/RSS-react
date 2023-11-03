@@ -29,6 +29,13 @@ const Result = ({ searchInput }: ResultProps) => {
     try {
       setIsLoading(true);
       const action = await fetchCharacters(searchInput, pageNumber);
+      if(action === ''){
+        setTotalPages(0);
+        setTotalCharacters(0);
+        setCharactersArr([]);
+        setIsLoading(false);
+        setPageNumber(1);
+      }
       if (action) {
         const charactersData = action.results;
         setTotalPages(Number(action.info.pages));
