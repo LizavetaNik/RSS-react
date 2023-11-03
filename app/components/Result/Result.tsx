@@ -13,6 +13,8 @@ const Result = ({ searchInput }: ResultProps) => {
   const [booksArr, setBooksArr] = useState<BookItem[]>([]);
   const navigate = useNavigate();
   const [pageNumber, setPageNumber] = useState(1);
+  const [quantityBooks, setQuantityBooks] = useState(20);
+  const [newQuantity, setNewQuantity] = useState('');
 
   const fetchData = async () => {
     console.log("Num page = " + pageNumber);
@@ -46,6 +48,7 @@ const Result = ({ searchInput }: ResultProps) => {
         >
           Previous
         </button>
+        <div className={styles.numberPage}>{pageNumber}</div>
         <button
           onClick={() => {
             setPageNumber(pageNumber + 1);
@@ -53,10 +56,29 @@ const Result = ({ searchInput }: ResultProps) => {
         >
           Next
         </button>
+        <div className={styles.quantityBooks}>
+          <input
+            type="number"
+            id="bookQuantity"
+            placeholder="Введите количество книг"
+            value={newQuantity}
+            onChange={(e) => setNewQuantity(e.target.value)}
+            />
+            <button 
+              onClick={() => {
+                if (newQuantity !== '') {
+                  setQuantityBooks(Number(newQuantity));
+                  setPageNumber(1);
+                }
+              }}
+              >
+              Change quantity
+            </button>
+        </div>
       </div>
-
+      
       <div className={styles.wrapper}>
-        {booksArr.map((book: BookItem) => (
+        {booksArr.slice(0, quantityBooks).map((book: BookItem) => (
           <Book key={book.id} name={book.name} image={book.image} />
         ))}
       </div>

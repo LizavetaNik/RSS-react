@@ -7,7 +7,20 @@
 .pagination {
     display: flex;
     justify-content: center;
+    align-self: center;
     margin-bottom: 10px;
+}
+
+.numberPage {
+  margin: 0 10px;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.quantityBooks {
+    margin-left: 10px;
+    display: flex;
+    align-self: center;
 }
 
 @media (max-width: 900px) {
