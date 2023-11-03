@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { fetchBooks } from '../../services/bookThunk';
+import { fetchCharacters } from '../../services/characterThunk';
 import styles from './Result.module.scss';
-import Book from './Book/Book';
-import { BookItem } from '../../data/users.data';
+import Character from './Character/Character';
+import { CharacterItem } from '../../data/users.data';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import BookDetails from './BookDetails/BookDetails';
+import CharacterDetails from './CharacterDetails/CharacterDetails';
 import { ClipLoader } from 'react-spinners';
 
 interface ResultProps {
@@ -12,28 +12,28 @@ interface ResultProps {
 }
 
 const Result = ({ searchInput }: ResultProps) => {
-  const [booksArr, setBooksArr] = useState<BookItem[]>([]);
+  const [charactersArr, setCharactersArr] = useState<CharacterItem[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [newQuantity, setNewQuantity] = useState(20);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalBooks, setTotalBooks] = useState(1);
+  const [totalCharacters, setTotalCharacters] = useState(1);
 
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const bookId = searchParams.get("book");
+  const characterId = searchParams.get("character");
   const quantityOptions = [5, 10, 15, 20];
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const action = await fetchBooks(searchInput, pageNumber);
+      const action = await fetchCharacters(searchInput, pageNumber);
       if (action) {
-        const booksData = action.results;
+        const charactersData = action.results;
         setTotalPages(Number(action.info.pages));
-        setTotalBooks(Number(action.info.count));
-        setBooksArr(booksData);
+        setTotalCharacters(Number(action.info.count));
+        setCharactersArr(charactersData);
         setIsLoading(false);
         navigate(`/home?page=${pageNumber}`, { replace: true });
       }
@@ -48,8 +48,8 @@ const Result = ({ searchInput }: ResultProps) => {
     fetchData();
   }, [searchInput, pageNumber]);
 
-  const getDataBook = (id: string): BookItem | undefined => {
-    return booksArr.find((book) => Number(book.id) === Number(id));
+  const getDataCharacter = (id: string): CharacterItem | undefined => {
+    return charactersArr.find((character) => Number(character.id) === Number(id));
   };
 
   return (
@@ -78,10 +78,10 @@ const Result = ({ searchInput }: ResultProps) => {
         >
           Next
         </button>
-        <div className={styles.quantityBooks}>
+        <div className={styles.quantityCharacters}>
           <label>Change quantity</label>
           <select
-            id="bookQuantity"
+            id="characterQuantity"
             value={newQuantity}
             onChange={(e) => { setPageNumber(1); setNewQuantity( Number(e.target.value)) }}
           >
@@ -94,19 +94,19 @@ const Result = ({ searchInput }: ResultProps) => {
         </div>
       </div>
       <div className={styles.totalBlock}>
-        <p>Total elements : {totalBooks} / Total pages : {totalPages} / Search : {searchInput}</p>
+        <p>Total elements : {totalCharacters} / Total pages : {totalPages} / Search : {searchInput}</p>
       </div>
-      <div className={`page-container ${bookId ? '' : 'bookDetailsNotVisible'}`}>
+      <div className={`page-container ${characterId ? '' : 'characterDetailsNotVisible'}`}>
         <div className={styles.wrapperResult}>
           <div className={styles.wrapper}>
-            {booksArr.slice(0, newQuantity).map((book: BookItem) => (
-              <Book key={book.id} name={book.name} image={book.image} bookId={book.id} pageNumber={pageNumber.toString()} />
+            {charactersArr.slice(0, newQuantity).map((character: CharacterItem) => (
+              <Character key={character.id} name={character.name} image={character.image} characterId={character.id} pageNumber={pageNumber.toString()} />
             ))}
           </div>
-          {(bookId != undefined) && (
+          {(characterId != undefined) && (
             <div className={`${styles.rightPanel}`}>
               <Outlet />
-              <BookDetails pageNumber={pageNumber.toString()} dataBook={getDataBook(bookId)}/>
+              <CharacterDetails pageNumber={pageNumber.toString()} dataCharacter={getDataCharacter(characterId)}/>
             </div>
           )}
         </div>

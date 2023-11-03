@@ -1,4 +1,4 @@
-export type BookItem = {
+export type CharacterItem = {
     id: string,
     name: string,
     image: string,

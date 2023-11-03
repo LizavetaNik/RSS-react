@@ -10,7 +10,7 @@ function App() {
         <Route index path="/" element={<Home />} />
         <Route path="home/" element={<Home />} />
         <Route path="?page=:pageNumber" element={<Home />} />
-        <Route path="?page=:pageNumber&book=:bookId" element={<Home />} />
+        <Route path="?page=:pageNumber&Character=:CharacterId" element={<Home />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
