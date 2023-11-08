@@ -1,29 +1,27 @@
 import { FC, useState, useEffect } from 'react';
 import styles from './Search.module.scss';
+import { useDispatch } from 'react-redux';
+import { setSearchResults } from '../../features/valueSearchSlice';
 
-interface SearchProps {
-    onSearchSubmit: (inputValue: string) => void;
-}
-
-const Search: FC<SearchProps> = ({ onSearchSubmit }) => {
+const Search: FC = () => {
   const [inputValue, setInputValue] = useState("");
-
+  const dispatch = useDispatch();
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
   const handleSubmit = () => {
     localStorage.setItem('searchQuery', inputValue);
-    onSearchSubmit(inputValue);
+    dispatch(setSearchResults(inputValue));
   };
 
   useEffect( () => {
     const savedSearchQuery = localStorage.getItem('searchQuery');
     if (savedSearchQuery) {
       setInputValue(savedSearchQuery);
-      onSearchSubmit(savedSearchQuery);
     }
-  }, [onSearchSubmit]);
+  }, []);
 
   return (
     <>

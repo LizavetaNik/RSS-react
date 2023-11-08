@@ -5,12 +5,7 @@ import Search from '../../components/Search/Search';
 import ErrorBoundary from '../../components/Error/ErrorBoundary';
 
 function Home() {
-  const [searchInput, setSearchInput] = useState('');
   const [error, setError] = useState<Error | null>(null);
-
-  const handleSearchSubmit = (inputValue: string) => {
-    setSearchInput(inputValue);
-  };
 
   const handleError = () => {
     setError( Error("Error boundary") );
@@ -28,8 +23,8 @@ function Home() {
 
       <div className={styles.wrapper}>
         <div className={styles.wrapper_result}>
-          <Search onSearchSubmit={handleSearchSubmit} />
-          <Result searchInput={searchInput} />
+          <Search />
+          <Result />
         </div>
       </div>
     </ErrorBoundary>

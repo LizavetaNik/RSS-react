@@ -1,7 +1,11 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-export const fetchCharacters = async (name: string, pageNumber: number) => {
-    
+export const fetchCharacters = createAsyncThunk(
+  "characters/fetchCharacters",
+  async (params: { name: string; pageNumber: number }, { }) => {
+    const { name, pageNumber } = params;
     try {
       const queryParams = [];
       if (name) {
@@ -29,4 +33,5 @@ export const fetchCharacters = async (name: string, pageNumber: number) => {
       console.log(`HTTP error: ${e}`);      
       throw new Error(`HTTP error: ${e}`);
     }
-};
+  }
+);

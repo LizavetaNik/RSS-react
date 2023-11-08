@@ -6,12 +6,11 @@ import { CharacterItem } from '../../data/users.data';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import CharacterDetails from './CharacterDetails/CharacterDetails';
 import { ClipLoader } from 'react-spinners';
+import { useAppDispatch } from "../../hooks/hooks";
+import { useSelector } from 'react-redux';
+import { selectSearchResults } from '../../features/valueSearchSlice';
 
-interface ResultProps {
-  searchInput: string;
-}
-
-const Result = ({ searchInput }: ResultProps) => {
+const Result = () => {
   const [charactersArr, setCharactersArr] = useState<CharacterItem[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [newQuantity, setNewQuantity] = useState(20);
@@ -19,40 +18,47 @@ const Result = ({ searchInput }: ResultProps) => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCharacters, setTotalCharacters] = useState(1);
 
+  const searchInput = useSelector(selectSearchResults);
+  
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const characterId = searchParams.get("character");
   const quantityOptions = [5, 10, 15, 20];
+  const dispatch = useAppDispatch();
 
-  const fetchData = async () => {
+  const fetchDate = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const action = await fetchCharacters(searchInput, pageNumber);
-      if(action === ''){
-        setTotalPages(0);
-        setTotalCharacters(0);
-        setCharactersArr([]);
-        setIsLoading(false);
-        setPageNumber(1);
-      }
-      if (action) {
-        const charactersData = action.results;
-        setTotalPages(Number(action.info.pages));
-        setTotalCharacters(Number(action.info.count));
-        setCharactersArr(charactersData);
-        setIsLoading(false);
-        navigate(`/home?page=${pageNumber}`, { replace: true });
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.log(err);
-      }
+        const resultAction = await dispatch(fetchCharacters({ name: searchInput, pageNumber }));
+        const responseBody = resultAction.payload;
+        if(responseBody.length === 0){
+          setTotalPages(0);
+          setTotalCharacters(0);
+          setCharactersArr([]);
+          setIsLoading(false);
+          setPageNumber(1);
+        } else{
+          setTotalPages(Number(responseBody.info.pages));
+          setTotalCharacters(Number(responseBody.info.count));
+          setCharactersArr(responseBody.results);
+          setIsLoading(false);
+          navigate(`/home?page=${pageNumber}`, { replace: true });
+        }
+    } catch (e) {
+        console.log("Error reading columns");
     }
   };
-
+   
   useEffect(() => {
-    fetchData();
+    fetchDate();
+    console.log(searchInput);
+    if(searchInput != ''){
+      setCharactersArr(
+        charactersArr.filter((character) => character.name.includes(searchInput))
+      );
+    }
+
   }, [searchInput, pageNumber]);
 
   const getDataCharacter = (id: string): CharacterItem | undefined => {
@@ -66,7 +72,7 @@ const Result = ({ searchInput }: ResultProps) => {
       <ClipLoader color="#0168ce" loading={true} size={100}/>
     </div> 
     ) : (
-      <>
+      <> 
       <div className={styles.pagination}>
         <button
           onClick={() => {
@@ -103,6 +109,7 @@ const Result = ({ searchInput }: ResultProps) => {
       <div className={styles.totalBlock}>
         <p>Total elements : {totalCharacters} / Total pages : {totalPages} / Search : {searchInput}</p>
       </div>
+      {charactersArr.length > 0 && (
       <div className={`page-container ${characterId ? '' : 'characterDetailsNotVisible'}`}>
         <div className={styles.wrapperResult}>
           <div className={styles.wrapper}>
@@ -117,7 +124,8 @@ const Result = ({ searchInput }: ResultProps) => {
             </div>
           )}
         </div>
-      </div>
+      </div> 
+      )}   
       </>
       )}
     </>
