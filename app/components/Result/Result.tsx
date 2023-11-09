@@ -52,13 +52,11 @@ const Result = () => {
    
   useEffect(() => {
     fetchDate();
-    console.log(searchInput);
     if(searchInput != ''){
       setCharactersArr(
         charactersArr.filter((character) => character.name.includes(searchInput))
       );
     }
-
   }, [searchInput, pageNumber]);
 
   const getDataCharacter = (id: string): CharacterItem | undefined => {

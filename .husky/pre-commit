@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-cd ./my_new_react && npx lint-staged --allow-empty
+npm run format:fix && npm run lint && npm test
