@@ -14,7 +14,7 @@ describe('Search Component', () => {
         <Search />
       </Provider>
     );
-    
+
     // Simulate typing into the input field
     const inputElement = screen.getByPlaceholderText('Enter text');
     const inputValue = 'Test Search Value';
@@ -28,11 +28,11 @@ describe('Search Component', () => {
     const savedSearchQuery = localStorage.getItem('searchQuery');
     expect(savedSearchQuery).toBe(inputValue);
   });
- 
+
   it('should display saved value from localStorage in the input field on component mount', () => {
     const mockStore = configureStore();
     const store = mockStore({});
-    
+
     const testValue = 'Saved Search Value';
     localStorage.setItem('searchQuery', testValue); // Set a value in localStorage before rendering
 
