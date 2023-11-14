@@ -1,6 +1,8 @@
 import { FC } from "react";
 import styles from "./Character.module.scss";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setViewModeResults } from "../../../features/viewMode";
 
 interface Props {
     key: string,
@@ -12,8 +14,10 @@ interface Props {
 
 const Character: FC<Props> = ({ name, image, characterId, pageNumber }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleCharacterClick = () => {
+      dispatch(setViewModeResults(characterId));
       navigate(`?page=${pageNumber}&character=${characterId}`);
     };
     

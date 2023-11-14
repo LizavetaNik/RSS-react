@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './Result.module.scss';
 import Character from './Character/Character';
 import { CharacterItem } from '../../data/users.data';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import CharacterDetails from './CharacterDetails/CharacterDetails';
 import { ClipLoader } from 'react-spinners';
 import { useSelector } from 'react-redux';
 import { selectSearchResults } from '../../features/valueSearchSlice';
+import { selectViewModeResults } from '../../features/viewMode';
 import { useFetchCharactersQuery } from '../../features/charactersApi';
 
 const Result = () => {
@@ -20,9 +21,7 @@ const Result = () => {
   const searchInput = useSelector(selectSearchResults);
   
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const characterId = searchParams.get("character");
+  const characterId = useSelector(selectViewModeResults);
   const quantityOptions = [5, 10, 15, 20];
 
   const { data, isLoading, isError, error } = useFetchCharactersQuery({ name: searchInput, pageNumber });
@@ -49,7 +48,7 @@ const Result = () => {
 
   useEffect(() => {
     setPageNumber(1);
-  }, [searchInput]);  
+  }, [searchInput]); 
 
   return (
     <>
@@ -103,7 +102,7 @@ const Result = () => {
               <Character key={character.id} name={character.name} image={character.image} characterId={character.id} pageNumber={pageNumber.toString()} />
             ))}
           </div>
-          {(characterId != undefined) && (
+          {(characterId != '') && (
             <div className={`${styles.rightPanel}`}>
               <Outlet />
               <CharacterDetails pageNumber={pageNumber.toString()} id={characterId}/>
