@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { fetchCharacters } from '../../services/charactersThunk';
 import styles from './Result.module.scss';
 import Character from './Character/Character';
 import { CharacterItem } from '../../data/users.data';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import CharacterDetails from './CharacterDetails/CharacterDetails';
 import { ClipLoader } from 'react-spinners';
-import { useAppDispatch } from "../../hooks/hooks";
 import { useSelector } from 'react-redux';
 import { selectSearchResults } from '../../features/valueSearchSlice';
-import { selectIsLoading } from '../../features/loadingSlice';
+import { useFetchCharactersQuery } from '../../features/charactersApi';
 
 const Result = () => {
   const [charactersArr, setCharactersArr] = useState<CharacterItem[]>([]);
@@ -20,43 +18,38 @@ const Result = () => {
   const [totalCharacters, setTotalCharacters] = useState(1);
 
   const searchInput = useSelector(selectSearchResults);
-  const isLoading = useSelector(selectIsLoading);
   
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const characterId = searchParams.get("character");
   const quantityOptions = [5, 10, 15, 20];
-  const dispatch = useAppDispatch();
 
-  const fetchDate = async () => {
-    try {
-        const resultAction = await dispatch(fetchCharacters({ name: searchInput, pageNumber }));
-        const responseBody = resultAction.payload;
-        if(responseBody.length === 0){
-          setTotalPages(0);
-          setTotalCharacters(0);
-          setCharactersArr([]);
-          setPageNumber(1);
-        } else{
-          setTotalPages(Number(responseBody.info.pages));
-          setTotalCharacters(Number(responseBody.info.count));
-          setCharactersArr(responseBody.results);
-          navigate(`/home?page=${pageNumber}`, { replace: true });
-        }
-    } catch (e) {
-        console.log("Error reading columns");
-    }
-  };
-   
+  const { data, isLoading, isError, error } = useFetchCharactersQuery({ name: searchInput, pageNumber });
+
   useEffect(() => {
-    fetchDate();
-    if(searchInput != ''){
-      setCharactersArr(
-        charactersArr.filter((character) => character.name.includes(searchInput))
-      );
+    if (data) {
+      setTotalPages(Number(data.info.pages));
+      setTotalCharacters(Number(data.info.count));
+      setCharactersArr(data.results);
+      navigate(`/home?page=${pageNumber}`, { replace: true });
     }
-  }, [searchInput, pageNumber]);
+    if (isError) {
+      setTotalPages(0);
+      setTotalCharacters(0);
+      setCharactersArr([]);
+      setPageNumber(1);
+      console.log("Error reading columns " + error);
+    }
+  }, [data, pageNumber]);
+
+  useEffect(() => {
+    navigate(`/home?page=${pageNumber}`, { replace: true });
+  }, [pageNumber, navigate]);
+
+  useEffect(() => {
+    setPageNumber(1);
+  }, [searchInput]);  
 
   return (
     <>
@@ -120,7 +113,7 @@ const Result = () => {
       </div> 
       )}   
       </>
-      )}
+    )}  
     </>
   );
 };
