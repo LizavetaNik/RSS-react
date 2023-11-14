@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCharacters } from '../../services/characterThunk';
+import { fetchCharacters } from '../../services/charactersThunk';
 import styles from './Result.module.scss';
 import Character from './Character/Character';
 import { CharacterItem } from '../../data/users.data';
@@ -58,10 +58,6 @@ const Result = () => {
     }
   }, [searchInput, pageNumber]);
 
-  const getDataCharacter = (id: string): CharacterItem | undefined => {
-    return charactersArr.find((character) => Number(character.id) === Number(id));
-  };
-
   return (
     <>
     {isLoading ? (
@@ -117,7 +113,7 @@ const Result = () => {
           {(characterId != undefined) && (
             <div className={`${styles.rightPanel}`}>
               <Outlet />
-              <CharacterDetails pageNumber={pageNumber.toString()} dataCharacter={getDataCharacter(characterId)}/>
+              <CharacterDetails pageNumber={pageNumber.toString()} id={characterId}/>
             </div>
           )}
         </div>

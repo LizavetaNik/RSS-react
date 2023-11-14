@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { CharacterItem } from "../data/users.data";
-import { fetchCharacters } from "../services/characterThunk";
+import { fetchCharacters } from "../services/charactersThunk";
 
 export interface CharactersState {
   characters: {
