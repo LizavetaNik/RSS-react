@@ -9,16 +9,18 @@ import { ClipLoader } from 'react-spinners';
 import { useAppDispatch } from "../../hooks/hooks";
 import { useSelector } from 'react-redux';
 import { selectSearchResults } from '../../features/valueSearchSlice';
+import { selectIsLoading } from '../../features/loadingSlice';
 
 const Result = () => {
   const [charactersArr, setCharactersArr] = useState<CharacterItem[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [newQuantity, setNewQuantity] = useState(20);
-  const [isLoading, setIsLoading] = useState(true);
+  
   const [totalPages, setTotalPages] = useState(1);
   const [totalCharacters, setTotalCharacters] = useState(1);
 
   const searchInput = useSelector(selectSearchResults);
+  const isLoading = useSelector(selectIsLoading);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,7 +30,6 @@ const Result = () => {
   const dispatch = useAppDispatch();
 
   const fetchDate = async () => {
-    setIsLoading(true);
     try {
         const resultAction = await dispatch(fetchCharacters({ name: searchInput, pageNumber }));
         const responseBody = resultAction.payload;
@@ -36,13 +37,11 @@ const Result = () => {
           setTotalPages(0);
           setTotalCharacters(0);
           setCharactersArr([]);
-          setIsLoading(false);
           setPageNumber(1);
         } else{
           setTotalPages(Number(responseBody.info.pages));
           setTotalCharacters(Number(responseBody.info.count));
           setCharactersArr(responseBody.results);
-          setIsLoading(false);
           navigate(`/home?page=${pageNumber}`, { replace: true });
         }
     } catch (e) {
