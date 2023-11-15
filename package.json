@@ -10,8 +10,8 @@
     "lint:fix": "eslint . --ext ts --fix --color",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "prepare": "cd .. && husky install my_new_react/.husky",
-    "test": "jest --watchAll --config=jest.config.js"
+    "prepare": "cd .. && husky install RSS-REACT/.husky",
+    "test": "jest --watchAll --coverage --config=jest.config.cjs"
   },
   "dependencies": {
     "axios": "^1.4.0",

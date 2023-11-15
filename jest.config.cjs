@@ -19,7 +19,5 @@ module.exports = {
         useESM: true,
         tsconfig: 'tsconfig.json'
       }
-    },
-    setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
-  };
-  
+    }
+};  
