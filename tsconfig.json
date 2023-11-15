@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es6",
+    "useDefineForClassFields": true,
+    "lib": ["dom", "esnext"],
+    "skipLibCheck": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["app", "ErrorBoundary.tsx"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
