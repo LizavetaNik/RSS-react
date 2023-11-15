@@ -1,7 +1,12 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import CharacterDetails from '../components/Result/CharacterDetails/CharacterDetails';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => jest.fn(),
+}));
 
 describe('<CharacterDetails />', () => {
   it('displays detailed character information correctly', () => {
@@ -17,9 +22,9 @@ describe('<CharacterDetails />', () => {
     const dummyPageNumber = '1';
 
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <CharacterDetails pageNumber={dummyPageNumber} dataCharacter={dummyDataCharacter} />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     const nameElement = screen.getByRole('heading', { name: dummyDataCharacter.name });

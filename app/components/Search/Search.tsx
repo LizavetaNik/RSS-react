@@ -1,11 +1,8 @@
 import { FC, useState, useEffect } from 'react';
 import styles from './Search.module.scss';
-import { useDispatch } from 'react-redux';
-import { setSearchResults } from '../../features/valueSearchSlice';
 
 const Search: FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const dispatch = useDispatch();
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -13,7 +10,6 @@ const Search: FC = () => {
 
   const handleSubmit = () => {
     localStorage.setItem('searchQuery', inputValue);
-    dispatch(setSearchResults(inputValue));
   };
 
   useEffect( () => {

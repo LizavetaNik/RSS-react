@@ -11,10 +11,9 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "prepare": "cd .. && husky install my_new_react/.husky",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll --config=jest.config.js"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0",
     "react": "^18.2.0",
@@ -22,12 +21,9 @@
     "react-hook-form": "^7.45.4",
     "react-image-gallery": "^1.3.0",
     "react-modal": "^3.16.1",
-    "react-redux": "^8.1.2",
-    "react-router-dom": "^6.14.2",
+    "react-router-dom": "^6.18.0",
     "react-spinners": "^0.13.8",
     "react-toastify": "^9.1.3",
-    "redux-devtools-extension": "^2.13.9",
-    "redux-persist": "^6.0.0",
     "sass": "^1.65.1"
   },
   "devDependencies": {
@@ -37,13 +33,12 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/enzyme": "^3.10.16",
+    "@types/history": "^5.0.0",
     "@types/jest": "^27.0.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.7",
     "@types/react-image-gallery": "^1.2.0",
     "@types/react-modal": "^3.16.0",
-    "@types/react-redux": "^7.1.30",
-    "@types/redux-mock-store": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
@@ -57,7 +52,6 @@
     "jest-localstorage-mock": "^2.4.26",
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.2",
-    "redux-mock-store": "^1.5.4",
     "ts-jest": "^27.0.0",
     "typescript": "^4.9.5",
     "vite": "^4.2.0"

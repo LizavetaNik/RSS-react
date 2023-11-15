@@ -1,7 +1,12 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import Character from '../components/Result/Character/Character';
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => jest.fn(),
+}));
 
 describe('<Character />', () => {
   it('displays character data correctly', () => {
@@ -14,13 +19,13 @@ describe('<Character />', () => {
     };
 
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Character {...dummyCharacter} />
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     const nameElement = screen.getByRole('heading', { name: dummyCharacter.name });
-    const imageElement = screen.getByRole('img', { name: '' });
+    const imageElement = screen.getByRole('img', { name: `Character ${dummyCharacter.name}` });
     const buttonElement = screen.getByRole('button', { name: /more\.\.\./i });
 
     expect(nameElement).toBeInTheDocument();

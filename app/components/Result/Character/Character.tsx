@@ -20,7 +20,7 @@ const Character: FC<Props> = ({ name, image, characterId, pageNumber }) => {
     return (
         <div className={styles.wrapper}>
             <h2>{name}</h2>
-            <img src={image} className={styles.img_item}></img>
+            <img src={image} alt={`Character ${name}`} className={styles.img_item}></img>
             <button onClick={handleCharacterClick}>More...</button>
         </div>
     );

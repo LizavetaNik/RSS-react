@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { fetchCharacters } from '../../services/characterThunk';
+
 import styles from './Result.module.scss';
 import Character from './Character/Character';
 import { CharacterItem } from '../../data/users.data';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import CharacterDetails from './CharacterDetails/CharacterDetails';
 import { ClipLoader } from 'react-spinners';
-import { useAppDispatch } from "../../hooks/hooks";
-import { useSelector } from 'react-redux';
-import { selectSearchResults } from '../../features/valueSearchSlice';
+import { fetchBooks } from '../../services/bookThunk';
 
 const Result = () => {
   const [charactersArr, setCharactersArr] = useState<CharacterItem[]>([]);
@@ -17,34 +15,32 @@ const Result = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCharacters, setTotalCharacters] = useState(1);
-
-  const searchInput = useSelector(selectSearchResults);
-  
+  const searchInput = '';
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const characterId = searchParams.get("character");
   const quantityOptions = [5, 10, 15, 20];
-  const dispatch = useAppDispatch();
 
   const fetchDate = async () => {
     setIsLoading(true);
     try {
-        const resultAction = await dispatch(fetchCharacters({ name: searchInput, pageNumber }));
-        const responseBody = resultAction.payload;
-        if(responseBody.length === 0){
-          setTotalPages(0);
-          setTotalCharacters(0);
-          setCharactersArr([]);
-          setIsLoading(false);
-          setPageNumber(1);
-        } else{
-          setTotalPages(Number(responseBody.info.pages));
-          setTotalCharacters(Number(responseBody.info.count));
-          setCharactersArr(responseBody.results);
-          setIsLoading(false);
-          navigate(`/home?page=${pageNumber}`, { replace: true });
-        }
+      const action = await fetchBooks(searchInput);
+
+      if(action == ""){
+        setTotalPages(0);
+        setTotalCharacters(0);
+        setCharactersArr([]);
+        setIsLoading(false);
+        setPageNumber(1);
+      }
+      if (action) {
+        setTotalPages(Number(action.info.pages));
+        setTotalCharacters(Number(action.info.count));
+        setCharactersArr(action.results);
+        setIsLoading(false);
+        navigate(`/home?page=${pageNumber}`, { replace: true });
+      } 
     } catch (e) {
         console.log("Error reading columns");
     }
