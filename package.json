@@ -10,8 +10,8 @@
     "lint:fix": "eslint . --ext ts --fix --color",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "prepare": "cd .. && husky install my_new_react/.husky",
-    "test": "jest --watchAll"
+    "prepare": "cd .. && husky install RSS-REACT/.husky",
+    "test": "jest --watchAll --coverage --config=jest.config.cjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.7",
@@ -56,6 +56,7 @@
     "jest-environment-jsdom": "^27.5.1",
     "jest-localstorage-mock": "^2.4.26",
     "lint-staged": "^13.2.3",
+    "node-fetch": "^3.3.2",
     "prettier": "^3.0.2",
     "redux-mock-store": "^1.5.4",
     "ts-jest": "^27.0.0",

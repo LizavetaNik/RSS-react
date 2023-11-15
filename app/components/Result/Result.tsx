@@ -77,7 +77,7 @@ const Result = () => {
           Next
         </button>
         <div className={styles.quantityCharacters}>
-          <label>Change quantity</label>
+          <label htmlFor="characterQuantity">Change quantity</label>
           <select
             id="characterQuantity"
             value={newQuantity}

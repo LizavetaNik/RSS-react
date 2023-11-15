@@ -51,7 +51,7 @@ const CharacterDetails: FC<CharacterDetailsProps> = ( { pageNumber, id}) => {
       <div className={styles.wrapper}>
         <h2>{dataCharacter?.id}</h2>
         <h2>{dataCharacter?.name}</h2>
-        <img src={dataCharacter?.image} className={styles.img_item}></img>
+        <img src={dataCharacter?.image} className={styles.img_item} alt={dataCharacter?.name}></img>
         <p>Status: {dataCharacter?.status}</p>
         <p>Species: {dataCharacter?.species}</p>
         <p>Type: {dataCharacter?.type}</p>

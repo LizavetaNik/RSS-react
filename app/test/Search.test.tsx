@@ -15,16 +15,13 @@ describe('Search Component', () => {
       </Provider>
     );
 
-    // Simulate typing into the input field
     const inputElement = screen.getByPlaceholderText('Enter text');
     const inputValue = 'Test Search Value';
     fireEvent.change(inputElement, { target: { value: inputValue } });
 
-    // Simulate clicking the Search button
     const searchButton = screen.getByText('Search');
     fireEvent.click(searchButton);
 
-    // Check if the input value is saved in localStorage
     const savedSearchQuery = localStorage.getItem('searchQuery');
     expect(savedSearchQuery).toBe(inputValue);
   });
@@ -34,7 +31,7 @@ describe('Search Component', () => {
     const store = mockStore({});
 
     const testValue = 'Saved Search Value';
-    localStorage.setItem('searchQuery', testValue); // Set a value in localStorage before rendering
+    localStorage.setItem('searchQuery', testValue);
 
     render(
       <Provider store={store}>
@@ -42,8 +39,7 @@ describe('Search Component', () => {
       </Provider>
     );
 
-    // Check if the input value matches the value retrieved from localStorage
     const inputElement = screen.getByPlaceholderText('Enter text') as HTMLInputElement;
-    expect(inputElement.value).toBe(testValue); // Assert that the input value is the same as the localStorage value
+    expect(inputElement.value).toBe(testValue);
   });
 });

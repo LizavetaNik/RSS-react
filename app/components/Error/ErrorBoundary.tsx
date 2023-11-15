@@ -1,4 +1,4 @@
-import { Component, ErrorInfo } from 'react';
+import { Component } from 'react';
 import { ReactNode } from 'react';
 
 interface ErrorBoundaryProps {
@@ -20,20 +20,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   static getDerivedStateFromError(error: Error) {
-    return {
-      hasError: true,
-      error: error,
-    };
+    return { hasError: true, error: error.message };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.log('ErrorBoundary caught error!');
-    console.error(error);
-    console.error(errorInfo);
+  componentDidCatch(error: Error) {
+    return { hasError: true, error: error.message };
   }
 
   handleGoBack = () => {
-    this.setState({ hasError: false });
+    this.setState({ hasError: false, error: undefined });
   };
 
   render() {

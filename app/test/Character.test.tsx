@@ -1,7 +1,12 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 import Character from '../components/Result/Character/Character';
+
+const mockStore = configureStore();
+const store = mockStore({id: 1});
 
 describe('<Character />', () => {
   it('displays character data correctly', () => {
@@ -14,9 +19,11 @@ describe('<Character />', () => {
     };
 
     render(
-      <BrowserRouter>
-        <Character {...dummyCharacter} />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Character {...dummyCharacter} />
+        </BrowserRouter>
+      </Provider>
     );
 
     const nameElement = screen.getByRole('heading', { name: dummyCharacter.name });
@@ -29,4 +36,5 @@ describe('<Character />', () => {
     expect(buttonElement).toBeInTheDocument();
   });
 });
+
 

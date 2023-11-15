@@ -3,9 +3,9 @@ module.exports = {
     extensionsToTreatAsEsm: ['.ts', '.tsx'],
     testEnvironment: 'jsdom',
     testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
-    transform: { // 'transform' was misspelled as 'ransform'
+    transform: {
       '^.+\\.tsx?$': 'ts-jest',
-      '^.+\\.jsx?$': 'babel-jest', // This will use Babel for .js and .jsx files
+      '^.+\\.jsx?$': 'babel-jest',
     },
     moduleNameMapper: {
       '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -19,6 +19,6 @@ module.exports = {
         useESM: true,
         tsconfig: 'tsconfig.json'
       }
-    },
+    }
   };
   
