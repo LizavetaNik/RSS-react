@@ -5,10 +5,11 @@ import { CharacterItem } from '../../data/users.data';
 import { Outlet, useNavigate } from 'react-router-dom';
 import CharacterDetails from './CharacterDetails/CharacterDetails';
 import { ClipLoader } from 'react-spinners';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectSearchResults } from '../../features/valueSearchSlice';
 import { selectViewModeResults } from '../../features/viewMode';
 import { useFetchCharactersQuery } from '../../features/charactersApi';
+import { setQuantityItemsResults } from '../../features/quantityItems';
 
 const Result = () => {
   const [charactersArr, setCharactersArr] = useState<CharacterItem[]>([]);
@@ -19,12 +20,13 @@ const Result = () => {
   const [totalCharacters, setTotalCharacters] = useState(1);
 
   const searchInput = useSelector(selectSearchResults);
+  const dispatch = useDispatch();
   
   const navigate = useNavigate();
   const characterId = useSelector(selectViewModeResults);
   const quantityOptions = [5, 10, 15, 20];
 
-  const { data, isLoading, isError, error } = useFetchCharactersQuery({ name: searchInput, pageNumber });
+  const { data, isLoading, isError, error } = useFetchCharactersQuery({ name: searchInput, pageNumber, quantity: newQuantity });
 
   useEffect(() => {
     if (data) {
@@ -48,7 +50,14 @@ const Result = () => {
 
   useEffect(() => {
     setPageNumber(1);
-  }, [searchInput]); 
+  }, [searchInput]);
+  
+  useEffect( () => {
+    const quantityItems = localStorage.getItem('quantityItemsQuery');
+    if (quantityItems) {
+      setNewQuantity(Number(quantityItems));
+    }
+  }, []);
 
   return (
     <>
@@ -81,7 +90,11 @@ const Result = () => {
           <select
             id="characterQuantity"
             value={newQuantity}
-            onChange={(e) => { setPageNumber(1); setNewQuantity( Number(e.target.value)) }}
+            onChange={(e) => { 
+              setPageNumber(1); 
+              setNewQuantity( Number(e.target.value)); 
+              dispatch(setQuantityItemsResults(Number(e.target.value))); 
+            }}
           >
             {quantityOptions.map( (option) => (
               <option key={option} value={option}>
