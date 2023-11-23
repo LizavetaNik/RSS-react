@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import styles from './Search.module.css';
 
 interface SearchProps {
@@ -7,27 +7,25 @@ interface SearchProps {
 }
 
 const Search: FC<SearchProps> = ({ onSearchSubmit, defaultQuery = "" }) => {
-  const [inputValue, setInputValue] = React.useState(defaultQuery);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearchSubmit(inputValue);
+    if (inputRef.current) {
+      onSearchSubmit(inputRef.current.value);
+    }
   };
 
   return (
     <div className={styles.wrapper}>
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           type="text"
+          defaultValue={defaultQuery}
           placeholder="Enter text"
-          value={inputValue}
-          onChange={handleInputChange}
         />
-        <button className={styles.buttonSearch} type="submit">Search</button>  
+        <button className={styles.buttonSearch} type="submit">Search</button>
       </form>
     </div>
   );

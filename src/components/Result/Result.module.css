@@ -1,0 +1,92 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-self: baseline;
+}
+
+.numberPage {
+  margin: 0 10px;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.quantityCharacters {
+    margin-left: 10px;
+    display: flex;
+    align-self: center;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.wrapperResult {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between; 
+}
+
+.totalBlock {
+    margin: 0 10px;
+}
+  
+.rightPanel {
+    box-sizing: border-box;
+}
+  
+.rightPanel.characterDetailsNotVisible {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .wrapper {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 670px) {
+    .wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 440px) {
+    .wrapper {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.wrapper_item {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    border: 3px solid rgb(10, 10, 131);
+    border-radius: 5px;
+    width: 200px;
+}
+
+.wrapper_item:hover {
+    background-color: lightblue;
+}
+
+.img_item {
+    width: 70px;
+}
+
+.loadingIndicator {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+  
+.loading {
+    background-color: green;
+}
+  
+.notLoading {
+    background-color: red;
+}
