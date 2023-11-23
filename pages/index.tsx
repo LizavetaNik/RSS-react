@@ -59,32 +59,22 @@ export default function Home({ searchQuery, pageNumber, quantity, characterId, t
   };
 
   const handleMoreClick = (selectedId: string) => {
-    const currentUrl = new URL(window.location.href);
-    const searchParams = currentUrl.searchParams;
-    searchParams.set('characterId', selectedId);
-    const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
-    router.push(newUrl);
-  };
-
-  const handleCharacterClose = () => {
-    const currentUrl = new URL(window.location.href);
-    const searchParams = currentUrl.searchParams;
-    searchParams.delete('characterId');
-    const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
-    router.push(newUrl);
-  };
-
-  useEffect(() => {
-    async function fetchCharacterData() {
+     async function fetchCharacterData() {
       try {
-        if (characterId) {
-          const response = await fetch(`https://rickandmortyapi.com/api/character/${characterId}`);
+        if (selectedId) {
+          const response = await fetch(`https://rickandmortyapi.com/api/character/${selectedId}`);
           if (!response.ok) {
             throw new Error('Failed to fetch character data');
           }
           const data = await response.json();
           characterDataRef.current = data;
           forceUpdateKey.current = Date.now();
+
+          const currentUrl = new URL(window.location.href);
+          const searchParams = currentUrl.searchParams;
+          searchParams.set('characterId', selectedId);
+          const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
+          router.push(newUrl);
         } else {
           characterDataRef.current = null;
         }
@@ -94,7 +84,15 @@ export default function Home({ searchQuery, pageNumber, quantity, characterId, t
     }
   
     fetchCharacterData();
-  }, [characterId, router]);
+  };
+
+  const handleCharacterClose = () => {
+    const currentUrl = new URL(window.location.href);
+    const searchParams = currentUrl.searchParams;
+    searchParams.delete('characterId');
+    const newUrl = `${currentUrl.pathname}?${searchParams.toString()}`;
+    router.push(newUrl);
+  };
   
   return (
     <>
@@ -128,7 +126,6 @@ export default function Home({ searchQuery, pageNumber, quantity, characterId, t
         <CharacterDetails 
           key={forceUpdateKey.current}
           dataCharacter={characterDataRef.current} 
-          characterId={characterId} 
           onClose={handleCharacterClose} 
         />
       )}

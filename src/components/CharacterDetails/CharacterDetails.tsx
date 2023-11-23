@@ -1,15 +1,13 @@
 import { FC, useEffect, useRef, useState } from "react";
 import styles from "./CharacterDetails.module.css";
 import { CharacterItem } from "@/src/data/users.data";
-import router from "next/router";
 
 interface CharacterDetailsProps {
-  dataCharacter?: CharacterItem;
-  characterId: string;
+  dataCharacter: CharacterItem;
   onClose: () => void;
 }
 
-const CharacterDetails: FC<CharacterDetailsProps> = ({ dataCharacter, characterId, onClose }) => {
+const CharacterDetails: FC<CharacterDetailsProps> = ({ dataCharacter, onClose }) => {
 
   return (
     <>
