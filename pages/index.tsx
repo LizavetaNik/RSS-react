@@ -86,6 +86,12 @@ export default function Home({ searchQuery, pageNumber, quantity, characterId, t
     fetchCharacterData();
   };
 
+  useEffect(() => {
+    if (characterId) {
+      handleMoreClick(characterId);
+    }
+  }, [characterId]);
+
   const handleCharacterClose = () => {
     const currentUrl = new URL(window.location.href);
     const searchParams = currentUrl.searchParams;
