@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import Result from '../src/components/Result/Result';
 import Search from "../src/components/Search/Search";
-import { CharacterItem } from '@/src/data/users.data';
-import CharacterDetails from '@/src/components/CharacterDetails/CharacterDetails';
+import { CharacterItem } from "../src/data/users.data";
+import CharacterDetails from '../src/components/CharacterDetails/CharacterDetails';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const searchQuery = context.query.search as string || '';

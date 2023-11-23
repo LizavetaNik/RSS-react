@@ -1,6 +1,6 @@
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import React, { FC } from 'react';
 import styles from './Result.module.css';
-import { CharacterItem } from '@/src/data/users.data';
+import { CharacterItem } from '../../data/users.data';
 import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

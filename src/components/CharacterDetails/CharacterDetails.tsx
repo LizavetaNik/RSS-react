@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC } from "react";
 import styles from "./CharacterDetails.module.css";
-import { CharacterItem } from "@/src/data/users.data";
+import { CharacterItem } from "../../data/users.data";
+import React from 'react';
 
 interface CharacterDetailsProps {
   dataCharacter: CharacterItem;
