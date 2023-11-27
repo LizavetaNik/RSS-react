@@ -3,9 +3,11 @@ import styles from './ControlledForm.module.scss';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { DataCustom } from '../../data/users.data';
+import { updateFormData } from '../../features/formDataSlice';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object({
     name: yup.string().matches(/^[A-ZА-Я].*$/, "Первая буква должна быть заглавной").required(),
@@ -22,12 +24,21 @@ const schema = yup.object({
 const ControlledForm: FC = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
-      });
+    });
+    const dispatch = useDispatch();
   
-    const onSubmit = (data: DataCustom) => {
-      // Обработка данных формы
-      console.log(data);
-    };
+    const navigate = useNavigate();
+    const onSubmit = async (data: DataCustom) => {
+        if (data.image && data.image[0]) {
+          const base64 = await fileToBase64(data.image[0] as unknown as File);
+          data.image = base64;
+        } else {
+          data.image = undefined;
+        }
+      
+        dispatch(updateFormData(data));
+        navigate('/home');
+    };  
 
     const countries = useSelector((state: RootState) => state.countries.countries);
   
@@ -88,7 +99,15 @@ const ControlledForm: FC = () => {
       </>
       
     );
-  }
+}
   
-  export default ControlledForm;
+export default ControlledForm;
   
+function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+}  

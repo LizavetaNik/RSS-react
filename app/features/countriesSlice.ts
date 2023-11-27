@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialCountries = ['США', 'Канада', 'Франция', 'Германия', 'Япония', 'Англия', 'Украина', 'Бразилия', 'Австралия', 'Индия'];
+const initialCountries = ['USA', 'Canada', 'France', 'Germany', 'Japan', 'England', 'Ukraine', 'Brazil', 'Australia', 'India'];
 
 export const countriesSlice = createSlice({
   name: 'countries',
@@ -8,7 +8,6 @@ export const countriesSlice = createSlice({
     countries: initialCountries
   },
   reducers: {
-    // Опционально: редьюсеры для управления состоянием стран, если нужны
   }
 });
 

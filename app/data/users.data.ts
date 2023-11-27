@@ -24,5 +24,5 @@ export type DataCustom = {
   gender?: string,
   termsAndConditions?: boolean,
   country?: string,
-  image?: FileList, 
+  image?: string, 
 }

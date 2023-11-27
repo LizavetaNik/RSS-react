@@ -6,6 +6,7 @@ import { viewModeSlice } from "../features/viewMode";
 import { quantityItemsSlice } from "../features/quantityItems";
 import loadingReducer from "../features/loadingSlice";
 import countriesReducer from '../features/countriesSlice';
+import formDataSlice from "../features/formDataSlice";
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     quantityItemsOnPage: quantityItemsSlice.reducer,
     loading: loadingReducer,
     countries: countriesReducer,
+    formData: formDataSlice,
     [charactersApi.reducerPath]: charactersApi.reducer,
     [charApi.reducerPath]: charApi.reducer,
   },
