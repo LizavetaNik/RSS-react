@@ -5,6 +5,7 @@ import { charApi } from "../features/charApi";
 import { viewModeSlice } from "../features/viewMode";
 import { quantityItemsSlice } from "../features/quantityItems";
 import loadingReducer from "../features/loadingSlice";
+import countriesReducer from '../features/countriesSlice';
 
 export type RootState = ReturnType<typeof store.getState>;
 
@@ -14,6 +15,7 @@ export const store = configureStore({
     valueViewMode: viewModeSlice.reducer,
     quantityItemsOnPage: quantityItemsSlice.reducer,
     loading: loadingReducer,
+    countries: countriesReducer,
     [charactersApi.reducerPath]: charactersApi.reducer,
     [charApi.reducerPath]: charApi.reducer,
   },
