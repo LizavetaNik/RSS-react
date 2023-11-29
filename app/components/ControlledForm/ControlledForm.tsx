@@ -2,24 +2,13 @@ import { FC } from 'react';
 import styles from './ControlledForm.module.scss';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { DataCustom } from '../../data/users.data';
 import { updateFormData } from '../../features/formDataSlice';
 import { useNavigate } from 'react-router-dom';
-
-const schema = yup.object({
-    name: yup.string().matches(/^[A-ZА-Я].*$/, "Первая буква должна быть заглавной").required(),
-    age: yup.number().positive().integer().required(),
-    email: yup.string().email().required(),
-    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Пароли должны совпадать').required(),
-    password: yup.string().matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/, "Пароль должен содержать цифру, заглавную и строчную букву, специальный символ").required(),
-    gender: yup.string().required("Выберите пол"),
-    termsAndConditions: yup.boolean().oneOf([true], "Необходимо принять условия"),
-    image: yup.mixed().required("Необходимо выбрать изображение").test("fileSize", "Файл слишком большой", value => value && value[0] && value[0].size <= 1024 * 1024 /* 1MB */).test("fileFormat", "Недопустимый формат файла", value => value && value[0] && ["image/jpeg", "image/png"].includes(value[0].type)),
-    country: yup.string().required("Выберите страну"),
-});
+import { fileToBase64 } from '../../pages/FormPage/FormPage';
+import { schema } from '../../pages/FormPage/FormPage';
 
 const ControlledForm: FC = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -85,7 +74,7 @@ const ControlledForm: FC = () => {
           <p>{errors.image?.message?.toString()}</p>
         </div>
 
-        <label htmlFor="country">Страна</label>
+        <label htmlFor="country">Country</label>
         <select {...register("country")}>
         {countries.map((country, index) => (
             <option key={index} value={country}>{country}</option>
@@ -102,12 +91,3 @@ const ControlledForm: FC = () => {
 }
   
 export default ControlledForm;
-  
-function fileToBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
-      reader.readAsDataURL(file);
-    });
-}  
