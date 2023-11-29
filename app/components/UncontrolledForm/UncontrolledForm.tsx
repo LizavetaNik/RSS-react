@@ -7,7 +7,6 @@ import * as yup from 'yup';
 import { updateFormData } from '../../features/formDataSlice';
 import { schema } from '../../pages/FormPage/FormPage';
 import { DataCustom } from '../../data/users.data';
-import { fileToBase64 } from '../../pages/FormPage/FormPage';
 
 const UncontrolledForm: FC = () => {
     const dispatch = useDispatch();
@@ -70,7 +69,6 @@ const UncontrolledForm: FC = () => {
                 resetErrorMessages();
                 
                 error.inner.forEach((err) => {
-                  console.log(err);
                     switch (err.path) {
                         case 'name':
                             setNameErrorMessage(err.message);
