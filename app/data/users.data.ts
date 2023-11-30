@@ -14,3 +14,15 @@ export interface CharacterResponse {
     };
     results: CharacterItem[];
 }
+
+export type DataCustom = {
+  name?: string,
+  age?: number,
+  email?: string,
+  password?: string,
+  confirmPassword?: string,
+  gender?: string,
+  termsAndConditions?: boolean,
+  country?: string,
+  image?: string, 
+}
