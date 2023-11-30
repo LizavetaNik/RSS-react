@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './UncontrolledForm.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,10 +15,12 @@ const UncontrolledForm: FC = () => {
 
     const [inputName, setInputName] = useState("");
     const [nameErrorMessage, setNameErrorMessage] = useState('');
+    const [previousNames, setPreviousNames] = useState<string[]>([]);
     const [inputAge, setInputAge] = useState(0);
     const [ageErrorMessage, setAgeErrorMessage] = useState('');
     const [inputEmail, setInputEmail] = useState("");
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
+    const [previousEmails, setPreviousEmails] = useState<string[]>([]);
     const [inputPassword, setInputPassword] = useState("");
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
     const [inputConfirmPassword, setInputConfirmPassword] = useState("");
@@ -32,6 +34,14 @@ const UncontrolledForm: FC = () => {
     const [inputImage, setInputImage] = useState("");
     const [imageErrorMessage, setImageErrorMessage] = useState('');
     const [inputFile, setInputFile] = useState<File | null>(null);
+
+    useEffect(() => {
+      const savedNames = JSON.parse(localStorage.getItem('previousNames') || '[]');
+      setPreviousNames(savedNames);
+
+      const savedEmails = JSON.parse(localStorage.getItem('previousEmails') || '[]');
+      setPreviousEmails(savedEmails);
+    }, []);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -124,6 +134,12 @@ const UncontrolledForm: FC = () => {
         try {
           await schema.validateAt('name', { name: value });
           setNameErrorMessage('');
+
+          if (!previousNames.includes(value)) {
+            const newPreviousNames = [...previousNames, value];
+            setPreviousNames(newPreviousNames);
+            localStorage.setItem('previousNames', JSON.stringify(newPreviousNames));
+          }
         } catch (error) {
           if (error instanceof yup.ValidationError) {
             setNameErrorMessage(error.message);
@@ -150,6 +166,12 @@ const UncontrolledForm: FC = () => {
         try {
           await schema.validateAt('email', { email: value });
           setEmailErrorMessage('');
+
+          if (!previousEmails.includes(value)) {
+            const newPreviousEmails = [...previousEmails, value];
+            setPreviousEmails(newPreviousEmails);
+            localStorage.setItem('previousEmails', JSON.stringify(newPreviousEmails));
+          }
         } catch (error) {
           if (error instanceof yup.ValidationError) {
             setEmailErrorMessage(error.message);
@@ -257,7 +279,13 @@ const UncontrolledForm: FC = () => {
           value={inputName}
           onChange={handleNameChange}
           className={nameErrorMessage ? styles.errorInput : ''}
+          list="name-list"
         />
+        <datalist id="name-list">
+          {previousNames.map((name, index) => (
+            <option key={index} value={name} />
+          ))}
+        </datalist>
         {nameErrorMessage && <p>{nameErrorMessage}</p>}
       </div>
 
@@ -281,7 +309,13 @@ const UncontrolledForm: FC = () => {
             value={inputEmail} 
             onChange={handleEmailChange}
             className={emailErrorMessage ? styles.errorInput : ''}
+            list="name-list-email"
         />
+        <datalist id="name-list-email">
+          {previousEmails.map((name, index) => (
+            <option key={index} value={name} />
+          ))}
+        </datalist>
         {emailErrorMessage && <p>{emailErrorMessage}</p>}
       </div>
         

@@ -74,14 +74,15 @@ const ControlledForm: FC = () => {
           <p>{errors.image?.message?.toString()}</p>
         </div>
 
-        <label htmlFor="country">Country</label>
-        <select {...register("country")}>
-        {countries.map((country, index) => (
+        <div className={errors.country ? styles.errorInput : ''}>
+          <label htmlFor="country">Country</label>
+          <select {...register("country")}>
+          {countries.map((country, index) => (
             <option key={index} value={country}>{country}</option>
             ))}
-        </select>
-        <p>{errors.country?.message?.toString()}</p>
-
+          </select>
+          <p>{errors.country?.message?.toString()}</p>
+        </div>
   
         <button type="submit">Submit</button>
       </form>
