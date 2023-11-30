@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import * as yup from 'yup';
 import { updateFormData } from '../../features/formDataSlice';
-import { schema } from '../../pages/FormPage/FormPage';
+import { fileToBase64, schema } from '../../pages/FormPage/FormPage';
 import { DataCustom } from '../../data/users.data';
 
 const UncontrolledForm: FC = () => {
@@ -31,7 +31,6 @@ const UncontrolledForm: FC = () => {
     const [termsAndConditionsErrorMessage, setTermsAndConditionsErrorMessage] = useState('');
     const [inputCountry, setInputCountry] = useState("");
     const [countryErrorMessage, setCountryErrorMessage] = useState('');
-    const [inputImage, setInputImage] = useState("");
     const [imageErrorMessage, setImageErrorMessage] = useState('');
     const [inputFile, setInputFile] = useState<File | null>(null);
 
@@ -57,23 +56,24 @@ const UncontrolledForm: FC = () => {
             image: inputFile ? [inputFile] : [],
             country: inputCountry,
         };
-
-        const formData : DataCustom = {
-          name: inputName,
-          age: inputAge,
-          email: inputEmail,
-          password: inputPassword,
-          confirmPassword: inputConfirmPassword,
-          gender: inputGender,
-          termsAndConditions: inputTermsAndConditions,
-          country: inputCountry,
-          image: inputImage,
-      };
-
+        
         try {
-            await schema.validate(formDataValid, { abortEarly: false });
-            dispatch(updateFormData(formData));
-            navigate('/home');
+          await schema.validate(formDataValid, { abortEarly: false });
+
+          const base64 = await fileToBase64(inputFile as unknown as File);
+          const formData : DataCustom = {
+            name: inputName,
+            age: inputAge,
+            email: inputEmail,
+            password: inputPassword,
+            confirmPassword: inputConfirmPassword,
+            gender: inputGender,
+            termsAndConditions: inputTermsAndConditions,
+            country: inputCountry,
+            image: base64,
+          };
+          dispatch(updateFormData(formData));
+          navigate('/home');
         } catch (error) {
             if (error instanceof yup.ValidationError) {
                 resetErrorMessages();
@@ -112,7 +112,7 @@ const UncontrolledForm: FC = () => {
                     }
                 });
             }
-        }
+        }    
     };
     
     const resetErrorMessages = () => {
@@ -240,15 +240,9 @@ const UncontrolledForm: FC = () => {
       if (e.target.files && e.target.files[0]) {
           const file = e.target.files[0];
           setInputFile(file);
-  
-          const reader = new FileReader();
-          reader.onloadend = () => {
-              setInputImage(reader.result as string);
-          };
           setImageErrorMessage('');
       } else {
           setInputFile(null);
-          setInputImage('');
       }
     };
 
